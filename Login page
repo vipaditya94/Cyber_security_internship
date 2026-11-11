@@ -1,0 +1,60 @@
+import os
+
+USER_FILE = "users.txt"
+
+def register():
+    username = input("Enter now username: ").strip()
+    if not username:
+        print("Username not be blank.")
+        return
+
+    # Check karein ki username pehle se exist to nahi karta
+    if os.path.exists(USER_FILE):
+        with open(USER_FILE, "r") as f:
+            for line in f:
+                saved_user, _ = line.strip().split(",", 1)
+                if saved_user == username:
+                    print("Ye username pehle se exist karta hai.")
+                    return
+
+    password = input("Enter Password: ").strip()
+    if not password:
+        print("Password not be blank.")
+        return
+
+    with open(USER_FILE, "a") as f:
+        f.write(f"{username},{password}\n")
+    print("Registration successful!")
+
+def login():
+    username = input("Username daalein: ").strip()
+    password = input("Password daalein: ").strip()
+
+    if not os.path.exists(USER_FILE):
+        print("Login Failed: Pehle registration karein.")
+        return
+
+    with open(USER_FILE, "r") as f:
+        for line in f:
+            saved_user, saved_pass = line.strip().split(",", 1)
+            if saved_user == username and saved_pass == password:
+                print("Login Successful! Welcome,", username)
+                return
+
+    print("Login Failed: Username and password is incorrect.")
+
+while True:
+    print("\n1. Register")
+    print("2. Login")
+    print("3. Exit")
+    choice = input("Choose Option: ").strip()
+
+    if choice == "1":
+        register()
+    elif choice == "2":
+        login()
+    elif choice == "3":
+        print("Bye!")
+        break
+    else:
+        print("Wrong option. 1, 2 ya 3 chunein.")
